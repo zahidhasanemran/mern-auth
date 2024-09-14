@@ -3,18 +3,16 @@ import dotenv from "dotenv"
 import { connectDB } from "./db/db.js"
 import authrouter from "./routes/auth.routes.js"
 
+const PORT = process.env.PORT || 5000
 const app = express();
 dotenv.config();
 
-
-
-app.get("/", (req,res)=>{
-  res.send("Hello world")
-})
+// allow us to extract parameters form req.body 
+app.use(express.json())
 
 app.use("/api/auth", authrouter)
 
-app.listen(4000, ()=>{
+app.listen(PORT, ()=>{
   connectDB();
-  console.log('Server is running in 4000')
+  console.log(`Server is running in ${PORT}`)
 });
