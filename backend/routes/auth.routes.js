@@ -3,9 +3,9 @@ import { loginController, SignupController, logoutController, forgotPassControll
 
 const router = express.Router();
 
-router.get("/signup", SignupController)
-router.get("/login", loginController)
-router.get("/logout", logoutController)
-router.get("/forgot-password",forgotPassController)
+router.post("/signup", SignupController)
+router.post("/login", loginController)
+router.post("/logout", logoutController)
+router.post("/forgot-password",forgotPassController)
 
 export default router;
