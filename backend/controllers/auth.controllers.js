@@ -1,6 +1,7 @@
 import bcryptjs from "bcryptjs"
+import { sendEmailVerificationMail, sendWelcomeEmail } from "../configs/emails/emails.js"
 import { User } from "../models/user.model.js"
-import { getVerificationToken, generateJWToken } from "../utils/helper.js"
+import { generateJWToken, getVerificationToken } from "../utils/helper.js"
 
 
 export const SignupController = async (req, res) => {
@@ -22,6 +23,7 @@ export const SignupController = async (req, res) => {
       email,
       password: hashedPassword,
       name,
+      isVerified: false,
       verificationToken,
       verificationTokenExpiresAt: Date.now() + 24 + 60 + 60 + 1000
     });
@@ -29,6 +31,9 @@ export const SignupController = async (req, res) => {
     await user.save();
 
     generateJWToken(res, user?._id)
+    
+    sendEmailVerificationMail(user?.email, verificationToken);
+    
     res.status(200).json({
       success: true,
       message: 'User Created Successfully',
@@ -56,4 +61,44 @@ export const logoutController = async (req, res) => {
 
 export const forgotPassController = async (req, res) => {
   res.send("Forgot password router")
+}
+
+export const verifyEmailController = async (req, res) => {
+  const {code} = req?.body;
+  
+  try {
+    const user = await User.findOne({
+      verificationToken: code,
+      // verificationTokenExpiresAt:  Date.now()
+    })
+    console.log(user);
+    
+    if(!user){
+      return res.status(400).json({
+        success: false,
+        message: "Invalid or expired verification code"
+      })
+    }
+
+    user.isVerified = true;
+    user.verificationToken = undefined;
+    user.verificationTokenExpiresAt = undefined;
+  
+    await user.save();
+    
+    await sendWelcomeEmail (user?.email, user?.name)
+    
+    return res.status(200).json({
+      success: true, 
+      message: 'Verified Successfully',
+      user: {
+        ...user?._doc,
+        password: undefined
+      }
+    })
+
+  } catch (error) {
+    // console.log(error);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
 }

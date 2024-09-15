@@ -3,9 +3,9 @@ import dotenv from "dotenv"
 import { connectDB } from "./db/db.js"
 import authrouter from "./routes/auth.routes.js"
 
-const PORT = process.env.PORT || 5000
-const app = express();
 dotenv.config();
+const PORT = process.env.PORT || 5001
+const app = express();
 
 // allow us to extract parameters form req.body 
 app.use(express.json())

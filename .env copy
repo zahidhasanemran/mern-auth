@@ -1,7 +1,0 @@
-MONGO_URL=mongodb+srv://emrans45:FF4o8th5GVbahtsS@cluster0.b4zqu.mongodb.net/auth_db?retryWrites=true&w=majority&appName=Cluster0
-PORT=5000
-
-JWT_SECRET=DSAFH2159AHFDS2818
-NODE_ENV=development
-
-MailtrapTOKEN=d6b2019a7e81af467ed70e652183db80

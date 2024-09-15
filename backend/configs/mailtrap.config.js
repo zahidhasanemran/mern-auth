@@ -4,13 +4,13 @@ import { MailtrapClient } from "mailtrap";
 
 dotenv.config()
 
-export const Mailtrapclient = new MailtrapClient({
+export const mailtrapclient = new MailtrapClient({
   token: process.env.MailtrapTOKEN,
 });
 
 export const sender = {
   email: "mailtrap@demomailtrap.com",
-  name: "Mailtrap Test",
+  name: "Signup  Test",
 };
 
 // const recipients = [
