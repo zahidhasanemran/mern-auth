@@ -1,7 +1,8 @@
 import bcryptjs from "bcryptjs"
-import { sendEmailVerificationMail, sendWelcomeEmail } from "../configs/emails/emails.js"
+import { sendEmailVerificationMail, sendWelcomeEmail, sendResetPasswordEmail } from "../configs/emails/emails.js"
 import { User } from "../models/user.model.js"
 import { generateJWToken, getVerificationToken } from "../utils/helper.js"
+import crypto from "crypto"
 
 
 export const SignupController = async (req, res) => {
@@ -51,16 +52,63 @@ export const SignupController = async (req, res) => {
 
 
 export const loginController = async (req, res) => {
-  res.send("login router")
+  const {email, password} = req?.body;
+  try {
+
+    const user = await User.findOne({email});
+    const isPasswordValid = bcryptjs.compare(user?.password, password);
+
+    if(!user || !isPasswordValid){
+      return res.status(400).json({success: false, message: 'Invalid credentials'})
+    }
+
+    generateJWToken(res, user?._id)
+
+    user.lastLogin = new Date();
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      message: 'Looged In Successfully',
+      user: {
+        ...user?._doc,
+        password: undefined,
+      }
+    })
+
+  } catch (error) {
+    res.status(200).json({success: false, message: 'Something went wrong'})
+  }
 }
 
 export const logoutController = async (req, res) => {
-  res.send("logout router")
+  res.clearCookie('token');
+  res.status(200).json({success: true, message: 'Logged out Successfully'})
 }
 
 
 export const forgotPassController = async (req, res) => {
-  res.send("Forgot password router")
+  const {email} = req?.body;
+  try {
+    const user = await User.findOne({email});
+    if(!user){
+      return res.status(400).json({success: false, message: 'User not found with this email'})
+    }
+
+    const resetToken = crypto.randomBytes(20).toString("hex")
+    const resetTokenExpiresAt = Date.now() + 1 + 60 + 60 + 1000; //1 hour
+    const ClientUrl = `${process.env.CLIENT_URL}/forgot-password/${resetToken}`
+
+    user.resetPasswordToken = resetToken;
+    user.resetPasswordExpiresAt = resetTokenExpiresAt;
+    await user.save();
+
+    await sendResetPasswordEmail(email, ClientUrl);
+    return res.status(200).json({success: true, message: "Password Reset link sent"})
+
+  } catch (error) {
+    res.status(400).json({success: false, message: 'Failed'})
+  }
 }
 
 export const verifyEmailController = async (req, res) => {
