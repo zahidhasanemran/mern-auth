@@ -1,5 +1,5 @@
 import bcryptjs from "bcryptjs"
-import { sendEmailVerificationMail, sendWelcomeEmail, sendResetPasswordEmail } from "../configs/emails/emails.js"
+import { sendEmailVerificationMail, sendWelcomeEmail, sendResetPasswordEmail, resetSuccessEmail } from "../configs/emails/emails.js"
 import { User } from "../models/user.model.js"
 import { generateJWToken, getVerificationToken } from "../utils/helper.js"
 import crypto from "crypto"
@@ -8,7 +8,6 @@ import crypto from "crypto"
 export const SignupController = async (req, res) => {
   const {email, password, name} = req?.body;
   try {
-
     if(!email || !password || !name){
       throw new Error("All fields are mandatory")
     }
@@ -97,7 +96,7 @@ export const forgotPassController = async (req, res) => {
 
     const resetToken = crypto.randomBytes(20).toString("hex")
     const resetTokenExpiresAt = Date.now() + 1 + 60 + 60 + 1000; //1 hour
-    const ClientUrl = `${process.env.CLIENT_URL}/forgot-password/${resetToken}`
+    const ClientUrl = `${process.env.CLIENT_URL}/reset-password/${resetToken}`
 
     user.resetPasswordToken = resetToken;
     user.resetPasswordExpiresAt = resetTokenExpiresAt;
@@ -148,5 +147,36 @@ export const verifyEmailController = async (req, res) => {
   } catch (error) {
     // console.log(error);
     return res.status(500).json({ success: false, message: "Server error" });
+  }
+}
+
+export const resetPassController = async (req, res) => {
+  const {password} = req?.body;
+  const {token} = req?.params;
+  
+  try {
+    const user = await User.findOne({resetPasswordToken: token });
+  
+    if(!user){
+      return res.status(400).json({
+        success: false,
+        message: "Invalid or expired reset token "
+      })
+    }
+  
+    const hashedPassword = await bcryptjs.hash(password, 10);
+    user.password = hashedPassword;
+    user.resetPasswordToken = undefined; 
+    user.resetPasswordExpiresAt = undefined;
+    await user.save();
+    console.log(user?.email)
+    await resetSuccessEmail(user?.email);
+  
+    res.status(200).json({
+      success: true,
+      message: "Password reset Successfully"
+    })
+  } catch (error) {
+    return res.status(400).json({success: false, message: "Email sent failed"})
   }
 }
