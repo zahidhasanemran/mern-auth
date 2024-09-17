@@ -36,18 +36,18 @@ const userAxiosWithRedirect = axios.create({
   },
 })
 
-userAxiosWithRedirect.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response.status === 401 && router?.pathname !== '/') {
-      // Cookies.remove('nToken', {
-      //   expires: 2,
-      // });
-      window.location.href = `${process.env.NEXT_PUBLIC_APP}/auth/login`
-    }
-    return Promise.reject(error)
-  },
-)
+// userAxiosWithRedirect.interceptors.response.use(
+//   (response) => response,
+//   (error) => {
+//     if (error.response.status === 401 && router?.pathname !== '/') {
+//       // Cookies.remove('nToken', {
+//       //   expires: 2,
+//       // });
+//       window.location.href = `${process.env.NEXT_PUBLIC_APP}/auth/login`
+//     }
+//     return Promise.reject(error)
+//   },
+// )
 
 export {
   publicAxios,
