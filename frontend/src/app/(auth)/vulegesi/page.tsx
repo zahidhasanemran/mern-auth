@@ -4,12 +4,10 @@ import Link from 'next/link'
 import { useForm, SubmitHandler } from 'react-hook-form'
 
 type Inputs = {
-  name: string
   email: string
-  password: string
 }
 
-export const Register = () => {
+const Vulegesi = () => {
   const {
     register,
     handleSubmit,
@@ -25,17 +23,9 @@ export const Register = () => {
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="mb-4 font-bold mt-3">
-        <h1 className=" text-2xl text-white ">Register</h1>
+        <h1 className=" text-2xl text-white ">Forgot Password</h1>
       </div>
-      <div className="mb-4">
-        <label className="w-full block text-white text-lg ">Name:</label>
-        <input
-          type="text"
-          className="block w-full rounded px-2 py-1"
-          {...register('name', { required: true })}
-        />
-        {errors?.name && <p>Name is required</p>}
-      </div>
+
       <div className="mb-4">
         <label className="w-full block text-white text-lg ">Email:</label>
         <input
@@ -45,17 +35,9 @@ export const Register = () => {
         />
         {errors?.email && <p>Email is required</p>}
       </div>
-      <div className="mb-4">
-        <label className="w-full block text-white text-lg ">Password:</label>
-        <input
-          type="password"
-          className="block w-full rounded px-2 py-1"
-          {...register('password', { required: true })}
-        />
-        {errors?.password && <p>Password is required</p>}
-      </div>
+
       <button className="" type="submit">
-        Signup
+        Send
       </button>
       <div className="">
         <Link href="/login">Login</Link>
@@ -64,4 +46,4 @@ export const Register = () => {
   )
 }
 
-export default Register
+export default Vulegesi

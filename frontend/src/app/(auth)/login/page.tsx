@@ -5,9 +5,10 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 
 type Inputs = {
   email: string
+  password: string
 }
 
-export const Vulegesi = () => {
+const Loginpage = () => {
   const {
     register,
     handleSubmit,
@@ -23,9 +24,8 @@ export const Vulegesi = () => {
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="mb-4 font-bold mt-3">
-        <h1 className=" text-2xl text-white ">Forgot Password</h1>
+        <h1 className=" text-2xl text-white ">Login</h1>
       </div>
-
       <div className="mb-4">
         <label className="w-full block text-white text-lg ">Email:</label>
         <input
@@ -35,15 +35,29 @@ export const Vulegesi = () => {
         />
         {errors?.email && <p>Email is required</p>}
       </div>
-
-      <button className="" type="submit">
-        Send
+      <div className="mb-4">
+        <label className="w-full block text-white text-lg ">Password:</label>
+        <input
+          type="password"
+          className="block w-full rounded px-2 py-1"
+          {...register('password', { required: true })}
+        />
+        {errors?.password && <p>Password is required</p>}
+      </div>
+      <button
+        className="px-3 py-2 bg-amber-700 text-white rounded mb-3"
+        type="submit"
+      >
+        Login
       </button>
       <div className="">
-        <Link href="/login">Login</Link>
+        <Link href="/register">Signup</Link>
+      </div>
+      <div className="">
+        <Link href="/forgot-password">Forgot Password</Link>
       </div>
     </form>
   )
 }
 
-export default Vulegesi
+export default Loginpage
