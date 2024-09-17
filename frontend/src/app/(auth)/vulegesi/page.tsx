@@ -7,7 +7,7 @@ type Inputs = {
   email: string
 }
 
-export const ForgotPage = () => {
+export const Vulegesi = () => {
   const {
     register,
     handleSubmit,
@@ -46,4 +46,4 @@ export const ForgotPage = () => {
   )
 }
 
-export default ForgotPage
+export default Vulegesi
