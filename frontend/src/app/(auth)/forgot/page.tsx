@@ -7,7 +7,7 @@ type Inputs = {
   email: string
 }
 
-export const Register = () => {
+export const Forgot = () => {
   const {
     register,
     handleSubmit,
@@ -46,4 +46,4 @@ export const Register = () => {
   )
 }
 
-export default Register
+export default Forgot
