@@ -1,16 +1,18 @@
-import { SubmitHandler, useForm } from 'react-hook-form'
-import { loginFunc } from '@/app/services/auth.services'
+
+import { registerFunc } from '@/app/services/auth.services'
+import { useForm, SubmitHandler } from 'react-hook-form'
 import { toast } from 'react-toastify'
 
-export type LoginInputs = {
+export type RegisterInputs = {
+  name: string
   email: string
   password: string
 }
 
-export const useLogin = () => {
-  const loginSubmit = async (data) => {
+export const useRegister = () => {
+  const signup = async (data) => {
     try {
-      const res = await loginFunc(data)
+      const res = await registerFunc(data)
       console.log(res)
       toast.success(res?.data?.data?.message)
       return res
@@ -19,20 +21,21 @@ export const useLogin = () => {
       toast.warn(error?.response?.data?.message)
     }
   }
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginInputs>()
+  } = useForm<RegisterInputs>()
 
-  const onSubmit: SubmitHandler<LoginInputs> = (data) => {
-    loginSubmit(data)
+  const onSubmit: SubmitHandler<RegisterInputs> = (data) => {
+    signup(data)
   }
 
   return {
     register,
     handleSubmit,
-    onSubmit,
     errors,
+    onSubmit,
   }
 }

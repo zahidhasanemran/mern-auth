@@ -1,22 +1,9 @@
 'use client'
-
 import Link from 'next/link'
-import { useForm, SubmitHandler } from 'react-hook-form'
-
-type Inputs = {
-  email: string
-  password: string
-}
+import { useLogin } from './useLogin'
 
 const Loginpage = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<Inputs>()
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data)
-  }
+  const { register, handleSubmit, onSubmit, errors } = useLogin()
 
   return (
     <form

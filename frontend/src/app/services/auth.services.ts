@@ -1,12 +1,12 @@
 import { publicAxios } from '../configs/axios.config'
 
-export const login = async () => {
+export const loginFunc = async () => {
   const res = await publicAxios.post(`auth/login`)
   return res
 }
 
-export const register = async () => {
-  const res = await publicAxios.post(`auth/signup`)
+export const registerFunc = async (data) => {
+  const res = await publicAxios.post(`/auth/signup`, data)
   return res
 }
 

@@ -1,23 +1,9 @@
 'use client'
-
 import Link from 'next/link'
-import { useForm, SubmitHandler } from 'react-hook-form'
-
-type Inputs = {
-  name: string
-  email: string
-  password: string
-}
+import { useRegister } from './useRegister'
 
 const Register = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<Inputs>()
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data)
-  }
+  const { register, handleSubmit, errors, onSubmit } = useRegister()
 
   return (
     <form

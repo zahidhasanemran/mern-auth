@@ -1,5 +1,5 @@
 import axios from 'axios'
-const api = process.env.NEXT_PUBLIC_API || 'http:localhost:5001/api/'
+const api = process.env.NEXT_PUBLIC_API || 'http://localhost:5001/api'
 
 const token: string = localStorage.getItem('posToken') || ''
 axios.defaults.headers.post['Content-Type'] = 'application/json'
