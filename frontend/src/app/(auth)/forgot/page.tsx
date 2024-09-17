@@ -7,7 +7,7 @@ type Inputs = {
   email: string
 }
 
-export const Forgot = () => {
+export const ForgotPage = () => {
   const {
     register,
     handleSubmit,
@@ -46,4 +46,4 @@ export const Forgot = () => {
   )
 }
 
-export default Forgot
+export default ForgotPage
